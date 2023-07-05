@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/app/state/auth.actions.ts", "../../libs/utils/src/lib/app.actions.ts"],
   "compilerOptions": {
     "types": ["jest", "node"]
   }
