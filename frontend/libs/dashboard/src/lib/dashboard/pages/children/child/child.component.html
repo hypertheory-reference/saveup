@@ -1,0 +1,18 @@
+<h1>child works!</h1>
+<p>The Id: {{id}}</p>
+<div *ngIf="child() as child">
+    <p>{{child.name}}</p>
+</div>
+<h2>Jobs Not Assigned to Child</h2>
+<ul>
+    <li *ngFor="let job of unassignedJobs()">
+        {{job.name}}
+        <button class="btn" (click)="assign(job.id)">Assign</button>
+    </li>
+</ul>
+<h2>Jobs Assigned to Child</h2>
+<ul>
+    <li *ngFor="let job of assignedJobs()">
+        {{job.name}}
+    </li>
+</ul>
