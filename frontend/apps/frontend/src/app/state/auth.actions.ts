@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { UserInfo } from '../../../../../libs/auth/src/lib/state/index';
+import { UserInfo } from './auth.reducer';
 
 
 export const AuthEvents = createActionGroup({
