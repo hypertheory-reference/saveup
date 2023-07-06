@@ -24,6 +24,7 @@ public static class DashboardGroup
         group.MapPostToWolverine<JobCreateRequest, Job>("/jobs");
         group.MapPostToWolverine<ChildJobAssignmentRequest, ChildJobAssignment>("/child-jobs");
         group.MapPostToWolverine<DashboardCreatedRequest, DashboardCreated>("/create");
+        group.RequireAuthorization();
         return group;
     }
 }

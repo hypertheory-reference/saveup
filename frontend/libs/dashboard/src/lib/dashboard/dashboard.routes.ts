@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Route } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
@@ -11,7 +11,8 @@ import { FEATURE_NAME, reducers } from './state';
 import * as childrenMapperCommandsEffects from './state/effects/children.effects';
 import * as featureEffects from './state/effects/feature.effects';
 import * as jobsEffects from './state/effects/jobs.effects';
-import * as childJobsEffects from './state/effects/child-jobs.effects'
+import * as childJobsEffects from './state/effects/child-jobs.effects';
+import { AuthInterceptor } from 'angular-auth-oidc-client';
 export const dashboardRoutes: Route[] = [
   {
     path: '',
@@ -41,6 +42,7 @@ export const dashboardRoutes: Route[] = [
         childJobsEffects
       ),
       provideHttpClient(),
+      { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     ],
   },
 ];
