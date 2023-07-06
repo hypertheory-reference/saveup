@@ -8,8 +8,8 @@ public record DashboardDetailsProjection
 {
     public Guid Id { get; set; }
     public int Version { get; set; }
-    public DateTimeOffset DateCreated { get; set; }
-    
+
+    public UserLogin? User { get; set; }
     public List<Child> Children { get; set; } = new();
     public List<Job> Jobs { get; set; } = new();
 
@@ -17,10 +17,7 @@ public record DashboardDetailsProjection
 
 
     public DashboardDetailsProjection() { }
-    public DashboardDetailsProjection(IEvent<DashboardCreated> @event)
-    {
-        DateCreated = @event.Timestamp;
-    }
+ 
 
     public void Apply(Child child)
     {
@@ -29,6 +26,10 @@ public record DashboardDetailsProjection
     public void Apply(Job job)
     {
         Jobs.Add(job);
+    }
+    public void Apply(UserLogin userLogin)
+    {
+        User = userLogin;
     }
 
     public void Apply(ChildJobAssignment assignment)
