@@ -8,13 +8,15 @@ import { API_URL } from '@saveup/utils';
 import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class AuthEffects {
-
-  requestLogin$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(AuthEvents.loginRequested),
-      map(() => this.oidcService.authorize())
-    );
-  }, {dispatch: false});
+  requestLogin$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(AuthEvents.loginRequested),
+        map(() => this.oidcService.authorize())
+      );
+    },
+    { dispatch: false }
+  );
 
   checkAuthOnStartup$ = createEffect(() => {
     return this.actions$.pipe(
@@ -22,7 +24,6 @@ export class AuthEffects {
       switchMap(() =>
         this.oidcService.checkAuth().pipe(
           map((auth) => {
-            
             if (auth.isAuthenticated) {
               return AuthDocuments.user({ user: auth.userData });
             } else {
@@ -34,13 +35,27 @@ export class AuthEffects {
     );
   });
 
-  sendLoginActivityToApi$ = createEffect(() => {
+  handleLogoutRequest$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(AuthDocuments.user),
-      filter(user => user.user !== null),
-      mergeMap(user => this.http.post(`${API_URL}dashboard/login`,  user.user ))
-    )
-  }, {dispatch: false}
+      ofType(AuthEvents.logoutRequested),
+      switchMap(() =>
+        this.oidcService
+          .logoff()
+          .pipe(map(() => AuthDocuments.user({ user: null })))
+      )
+    );
+  });
+  sendLoginActivityToApi$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(AuthDocuments.user),
+        filter((user) => user.user !== null),
+        mergeMap((user) =>
+          this.http.post(`${API_URL}dashboard/login`, user.user)
+        )
+      );
+    },
+    { dispatch: false }
   );
   constructor(
     private actions$: Actions,

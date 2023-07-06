@@ -1,0 +1,2 @@
+<button *ngIf="isLoggedIn === false" class="btn btn-primary" (click)="onLoginRequested()">Login</button>
+<button *ngIf="isLoggedIn === true" class="btn btn-primary" (click)="onLogoutRequested()">Logout {{userName}} </button>
