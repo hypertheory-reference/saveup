@@ -1,4 +1,7 @@
 <main class="m-20 prose">
   <button class="btn"(click)="login()">log In</button>
+  <pre> logged in: {{loggedIn() | json }}</pre>
+  <pre> user is: {{user() | json }}</pre>
+  <pre> auth is: {{auth() | json }}</pre>
   <router-outlet></router-outlet>
 </main>

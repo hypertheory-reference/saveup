@@ -1,0 +1,1 @@
+export const DUMMY = 4.13;
