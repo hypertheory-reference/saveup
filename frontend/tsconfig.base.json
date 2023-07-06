@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@saveup/auth": ["libs/auth/src/index.ts"],
+      "@saveup/ui": ["libs/ui/src/index.ts"],
       "@saveup/utils": ["libs/utils/src/index.ts"],
       "@startup/dashboard": ["libs/dashboard/src/index.ts"]
     }
