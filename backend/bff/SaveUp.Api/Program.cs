@@ -7,6 +7,7 @@ using Marten.Events.Projections;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SaveUp.Api.Dashboard.Projections;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(options =>
@@ -37,6 +38,18 @@ var connectionString = builder.Configuration.GetConnectionString("events") ?? th
 
 builder.Services.AddMarten(opts =>
 {
+    var serializer = new Marten.Services.JsonNetSerializer();
+    serializer.EnumStorage = Weasel.Core.EnumStorage.AsString;
+ 
+    serializer.Customize(s =>
+    {
+        s.ContractResolver = new DefaultContractResolver
+        {
+            NamingStrategy = new CamelCaseNamingStrategy()
+        };
+
+    });
+    opts.Serializer(serializer);
     opts.Connection(connectionString);
     opts.Projections.Snapshot<DashboardDetailsProjection>(SnapshotLifecycle.Inline);
     opts.DatabaseSchemaName = "saveup";

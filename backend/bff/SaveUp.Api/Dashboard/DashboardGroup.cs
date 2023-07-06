@@ -1,4 +1,5 @@
 ﻿using Marten;
+using Marten.AspNetCore;
 using SaveUp.Api.Dashboard.Projections;
 using Wolverine;
 using Wolverine.Http;
@@ -7,18 +8,17 @@ namespace SaveUp.Api.Dashboard;
 
 public static class DashboardGroup
 {
+
     public static RouteGroupBuilder AddDashboardGroup(this RouteGroupBuilder group)
     {
-        group.MapGet("/", async (IDocumentSession session, IdentityStreamIdProvider id) =>
+        group.MapGet("/",  (IDocumentSession session, IdentityStreamIdProvider id, IHttpContextAccessor context) =>
         {
-            var details = await session.Events.AggregateStreamAsync<DashboardDetailsProjection>(id.GetStreamId());
-            var response = new DashboardModel
-            {
-                Children = details?.Children ?? new(),
-                Jobs = details?.Jobs ?? new(),
-                ChildJobs = details?.ChildJobs ?? new()
-            };
-            return Results.Ok(response);
+            
+            return session.Json.WriteById<DashboardDetailsProjection>(id.GetStreamId(), context.HttpContext!);
+            //var response = await session.LoadAsync<DashboardDetailsProjection>(id.GetStreamId());
+    
+            //return Results.Ok(response);
+
         });
         group.MapPostToWolverine<UserLoginRequest, UserLogin>("/login");
         group.MapPostToWolverine<ChildCreateRequest, Child>("/children");
