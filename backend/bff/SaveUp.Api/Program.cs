@@ -1,5 +1,4 @@
 using Marten;
-using Marten.AspNetCore;
 using Wolverine;
 using SaveUp.Api;
 using SaveUp.Api.Dashboard;
@@ -7,7 +6,7 @@ using Marten.Events.Projections;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SaveUp.Api.Dashboard.Projections;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Serialization;
+using Weasel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(options =>
@@ -39,17 +38,10 @@ var connectionString = builder.Configuration.GetConnectionString("events") ?? th
 builder.Services.AddMarten(opts =>
 {
     var serializer = new Marten.Services.JsonNetSerializer();
-    serializer.EnumStorage = Weasel.Core.EnumStorage.AsString;
- 
-    serializer.Customize(s =>
-    {
-        s.ContractResolver = new DefaultContractResolver
-        {
-            NamingStrategy = new CamelCaseNamingStrategy()
-        };
-
-    });
+    serializer.EnumStorage = EnumStorage.AsString;
+    serializer.Casing = Casing.CamelCase;
     opts.Serializer(serializer);
+
     opts.Connection(connectionString);
     opts.Projections.Snapshot<DashboardDetailsProjection>(SnapshotLifecycle.Inline);
     opts.DatabaseSchemaName = "saveup";
@@ -73,6 +65,5 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors();
-app.MapGet("/tacos", () => "You are in!").RequireAuthorization();
 app.MapGroup("dashboard").AddDashboardGroup();
 app.Run();
