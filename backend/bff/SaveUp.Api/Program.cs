@@ -6,6 +6,7 @@ using SaveUp.Api.Dashboard;
 using Marten.Events.Projections;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SaveUp.Api.Dashboard.Projections;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(options =>
@@ -19,6 +20,11 @@ builder.Services.AddAuthentication(options =>
     o.Audience = "frontend";
     o.MetadataAddress = authority + "/realms/saveup/.well-known/openid-configuration";
     o.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
+    o.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateAudience = false,
+        NameClaimType = "preferred_username"
+    };
 });
 builder.Services.AddAuthorization();
 builder.Host.UseWolverine();
