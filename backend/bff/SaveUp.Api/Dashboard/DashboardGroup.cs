@@ -20,6 +20,7 @@ public static class DashboardGroup
             };
             return Results.Ok(response);
         });
+        group.MapPostToWolverine<UserLoginRequest, UserLogin>("/login");
         group.MapPostToWolverine<ChildCreateRequest, Child>("/children");
         group.MapPostToWolverine<JobCreateRequest, Job>("/jobs");
         group.MapPostToWolverine<ChildJobAssignmentRequest, ChildJobAssignment>("/child-jobs");

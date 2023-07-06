@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { AppEvents } from '@saveup/utils';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { map, switchMap } from 'rxjs';
+import { filter, map, mergeMap, switchMap } from 'rxjs';
 import { AuthDocuments, AuthEvents } from './auth.actions';
-
+import { API_URL } from '@saveup/utils';
+import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class AuthEffects {
 
@@ -32,8 +33,18 @@ export class AuthEffects {
       )
     );
   });
+
+  sendLoginActivityToApi$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AuthDocuments.user),
+      filter(user => user.user !== null),
+      mergeMap(user => this.http.post(`${API_URL}dashboard/login`,  user.user ))
+    )
+  }, {dispatch: false}
+  );
   constructor(
     private actions$: Actions,
-    private oidcService: OidcSecurityService
+    private oidcService: OidcSecurityService,
+    private http: HttpClient
   ) {}
 }

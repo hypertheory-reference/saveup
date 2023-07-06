@@ -26,8 +26,12 @@ builder.Services.AddAuthentication(options =>
         NameClaimType = "preferred_username"
     };
 });
+
 builder.Services.AddAuthorization();
+builder.Services.AddHttpContextAccessor();
+
 builder.Host.UseWolverine();
+
 var connectionString = builder.Configuration.GetConnectionString("events") ?? throw new Exception("Need Connection String for Events");
 
 
