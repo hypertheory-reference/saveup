@@ -40,15 +40,8 @@ builder.Services.AddMarten(opts =>
 {
     var serializer = new Marten.Services.JsonNetSerializer();
     serializer.EnumStorage = Weasel.Core.EnumStorage.AsString;
- 
-    serializer.Customize(s =>
-    {
-        s.ContractResolver = new DefaultContractResolver
-        {
-            NamingStrategy = new CamelCaseNamingStrategy()
-        };
-
-    });
+    serializer.Casing = Casing.CamelCase;
+    
     opts.Serializer(serializer);
     opts.Connection(connectionString);
     opts.Projections.Snapshot<DashboardDetailsProjection>(SnapshotLifecycle.Inline);
