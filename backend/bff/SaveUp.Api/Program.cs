@@ -37,13 +37,11 @@ var connectionString = builder.Configuration.GetConnectionString("events") ?? th
 
 builder.Services.AddMarten(opts =>
 {
-    var serializer = new Marten.Services.JsonNetSerializer();
-    serializer.EnumStorage = EnumStorage.AsString;
-    serializer.Casing = Casing.CamelCase;
-    opts.Serializer(serializer);
+    opts.UseDefaultSerialization(EnumStorage.AsString, Casing.CamelCase);
 
     opts.Connection(connectionString);
-    opts.Projections.Snapshot<DashboardDetailsProjection>(SnapshotLifecycle.Inline);
+    opts.Projections.Add<DashboardDetailsProjection>(ProjectionLifecycle.Inline);
+   // opts.Projections.Snapshot<DashboardDetailsProjection>(SnapshotLifecycle.Inline);
     opts.DatabaseSchemaName = "saveup";
 
 }).UseLightweightSessions();
