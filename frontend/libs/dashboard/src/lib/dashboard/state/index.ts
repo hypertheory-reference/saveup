@@ -6,16 +6,19 @@ import {
 import * as fromChildren from './reducers/children.reducer';
 import * as fromJobs from './reducers/jobs.reducer';
 import * as fromChildJobs from './reducers/child-jobs.reducer'
+import * as fromDashboard from './reducers/dashboard.reducer'
 import * as models from '../models';
 export const FEATURE_NAME = 'dashboardFeature';
 
 export interface DashboardState {
+  dashboard: fromDashboard.DashboardState;
   children: fromChildren.ChildrenState;
   jobs: fromJobs.JobsState;
   childJobs: fromChildJobs.ChildJobsState;
 }
 
 export const reducers: ActionReducerMap<DashboardState> = {
+  dashboard: fromDashboard.reducer,
   children: fromChildren.reducer,
   jobs: fromJobs.reducer,
   childJobs: fromChildJobs.reducer
@@ -26,12 +29,14 @@ const selectFeature = createFeatureSelector<DashboardState>(FEATURE_NAME);
 const selectChildrenBranch = createSelector(selectFeature, (f) => f.children);
 const selectJobsBranch = createSelector(selectFeature, (f) => f.jobs);
 const selectChildJobsBranch = createSelector(selectFeature, (f) => f.childJobs);
+const selectDashboarBranch = createSelector(selectFeature, (f) => f.dashboard);
 
 const { selectAll: selectChildJobsEntityArray } = fromChildJobs.adapter.getSelectors(selectChildJobsBranch);
 
 const {
   selectAll: selectChildrenEntityArray,
   selectEntities: selectChildEntities,
+  selectTotal: selectNumberOfChildren,
 } = fromChildren.adapter.getSelectors(selectChildrenBranch);
 
 const { selectAll: selectJobsEntityArray, selectEntities: selectJobEntities } =
@@ -52,7 +57,8 @@ export const selectChildModel = (id?: string) =>
     if (!id) {
       return undefined;
     } else {
-      return entities[id] as models.ChildListModel;
+      const kid = entities[id];
+      return {...kid, weeklyAllowance: kid?.weeklyAllowance ?? null  }as models.ChildListModel;
     }
   });
 
@@ -83,3 +89,21 @@ export const selectChildJobsAssignedToChild = (id?: string) =>
       }
     }
   );
+
+export const selectDashboardModel = createSelector(
+  selectDashboarBranch,
+  selectChildrenEntityArray,
+  (db, children) => {
+    const kids = children.map((c) => ({id: c.id, name: c.name, weeklyAllowance: c.weeklyAllowance || 0}));
+    const weekly = kids.reduce((p, c) => p + c.weeklyAllowance, 0);
+    const model: models.DashboardModel = {
+      id: db.id,
+      familyName: db.familyName,
+      totalWeeklyAllowance: weekly,
+      totalMonthlyAllowance: weekly * 4,
+      totalYearlyAllowance: weekly * 52,
+      totalChildren: children.length,
+      children: kids,
+    };
+    return model;
+  });

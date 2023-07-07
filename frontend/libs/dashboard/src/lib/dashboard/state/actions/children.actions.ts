@@ -5,6 +5,7 @@ export const ChildrenEvents = createActionGroup({
   source: 'Dashboard Children Events',
   events: {
     'Child Added': props<{ payload: ChildrenCreate }>(),
+    'Allowance Set': props<{ payload: ChildrenSetAllowance }>(),
   },
 });
 
@@ -12,6 +13,7 @@ export const ChildrenCommands = createActionGroup({
   source: 'Dashboard Children Commands',
   events: {
     'Add Child': props<{ payload: ChildrenCreate }>(),
+    'Set Allowance': props<{ payload: ChildrenSetAllowance }>(),
   },
 });
 
@@ -23,4 +25,10 @@ export const ChildrenDocuments = createActionGroup({
   },
 });
 
-export type ChildrenCreate = Omit<ChildrenEntity, 'id'>;
+export type ChildrenCreate = Pick<ChildrenEntity, 'name' | 'birthDate'>;
+
+export type ChildrenAllowanceChange = Pick<ChildrenEntity, 'weeklyAllowance'>;
+export type ChildrenSetAllowance = {
+  entity: ChildrenEntity,
+  changes: ChildrenAllowanceChange
+}

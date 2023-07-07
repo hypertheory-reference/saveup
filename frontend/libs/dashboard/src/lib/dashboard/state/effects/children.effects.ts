@@ -1,15 +1,15 @@
+import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { API_URL } from '@saveup/utils';
 import { map, mergeMap } from 'rxjs';
 import {
   ChildrenCommands,
   ChildrenDocuments,
   ChildrenEvents,
 } from '../actions/children.actions';
-import { API_URL } from '@saveup/utils';
-import { HttpClient } from '@angular/common/http';
-import { ChildrenEntity } from '../reducers/children.reducer';
 import { FeatureDocuments } from '../actions/feature.actions';
+import { ChildrenEntity } from '../reducers/children.reducer';
 
 export const childAddedToCommand = createEffect(
   (actions$ = inject(Actions)) => {
@@ -21,6 +21,15 @@ export const childAddedToCommand = createEffect(
   { functional: true }
 );
 
+export const childAllowanceToCommand = createEffect(
+  (actions$ = inject(Actions)) => {
+    return actions$.pipe(
+      ofType(ChildrenEvents.allowanceSet),
+      map(({ payload }) => ChildrenCommands.setAllowance({ payload }))
+    );
+  },
+  { functional: true }
+);
 export const addChild = createEffect(
   (actions$ = inject(Actions), http = inject(HttpClient)) => {
     return actions$.pipe(
@@ -29,6 +38,29 @@ export const addChild = createEffect(
         http
           .post<ChildrenEntity>(API_URL + 'dashboard/children', payload)
           .pipe(map((payload) => ChildrenDocuments.child({ payload })))
+      )
+    );
+  },
+  { functional: true }
+);
+
+export const adjustAllowance = createEffect(
+  (actions$ = inject(Actions), http = inject(HttpClient)) => {
+    return actions$.pipe(
+      ofType(ChildrenCommands.setAllowance),
+      mergeMap(({ payload }) =>
+        http
+          .post(
+            API_URL + `dashboard/children/${payload.entity.id}/allowance`,
+            payload.changes
+          )
+          .pipe(
+            map(() => ({
+              ...payload.entity,
+              weeklyAllowance: payload.changes.weeklyAllowance,
+            })),
+            map((payload) => ChildrenDocuments.child({ payload }))
+          )
       )
     );
   },

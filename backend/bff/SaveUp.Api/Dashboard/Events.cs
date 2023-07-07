@@ -18,4 +18,7 @@ public record UserLogin(Guid Sub, string Name, string PreferredUsername, string 
 public record CreateDashboardRequest(string FamilyName);
 public record Dashboard(Guid Id, string FamilyName);
 
+public record ChildAllowanceAssignmentRequest(decimal WeeklyAllowance);
+public record ChildAllowanceAssignment(Guid ChildId, decimal WeeklyAllowance);
+
 public record DashboardRequested();

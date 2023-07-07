@@ -6,6 +6,7 @@ export interface ChildrenEntity {
   id: string;
   name: string;
   birthDate: string | null;
+  weeklyAllowance: number | null;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

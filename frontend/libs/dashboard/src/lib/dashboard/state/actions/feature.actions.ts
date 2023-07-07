@@ -20,11 +20,13 @@ export const FeatureCommands = createActionGroup({
 export const FeatureDocuments = createActionGroup({
   source: 'Dashboard Feature Documents',
   events: {
-    Dashboard: props<{ payload: DashboardModelResponse }>(),
+    Dashboard: props<{ payload: DashboardApiResponse }>(),
   },
 });
 
-export type DashboardModelResponse = {
+export type DashboardApiResponse = {
+  id: string;
+  familyName: string;
   children: ChildrenEntity[];
   jobs: JobsEntity[];
   childJobs: ChildJobsEntity[];

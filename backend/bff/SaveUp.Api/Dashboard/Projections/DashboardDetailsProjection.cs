@@ -29,7 +29,9 @@ public class DashboardDetailsProjection : SingleStreamProjection<DashboardDetail
 
     public DashboardDetails Apply(Child @event, DashboardDetails current) => current with { Children = current.Children.Append(@event).ToList() };
     public DashboardDetails Apply(Job @event, DashboardDetails current) => current with { Jobs = current.Jobs.Append(@event).ToList() };
-    public DashboardDetails Apply(UserLogin @event, DashboardDetails current) => current with { User = @event };
+    public DashboardDetails Apply(UserLogin @event, DashboardDetails current) => current with { User = @event, FamilyName= @event.FamilyName + " Family" };
 
     public DashboardDetails Apply(ChildJobAssignment @event, DashboardDetails current) => current with { ChildJobs = current.ChildJobs.Append(@event).ToList() };
 }
+
+public record ChildProjectionModel(Guid Id, string Name, DateOnly BirthDate, decimal WeeklyAllowance) : Child(Id, Name, BirthDate);

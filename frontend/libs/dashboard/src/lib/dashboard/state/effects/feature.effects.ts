@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
-  DashboardModelResponse,
+  DashboardApiResponse,
   FeatureCommands,
   FeatureDocuments,
   FeatureEvents,
@@ -26,7 +26,7 @@ export const loadData = createEffect(
       ofType(FeatureCommands.loadDashboardData),
       switchMap(() =>
         http
-          .get<DashboardModelResponse>(API_URL + 'dashboard/')
+          .get<DashboardApiResponse>(API_URL + 'dashboard/')
           .pipe(map((payload) => FeatureDocuments.dashboard({ payload })))
       )
     );

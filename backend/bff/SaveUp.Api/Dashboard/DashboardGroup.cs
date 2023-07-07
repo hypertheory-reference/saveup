@@ -1,5 +1,6 @@
 ﻿using Marten;
 using Marten.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using SaveUp.Api.Dashboard.Projections;
 using Wolverine;
 using Wolverine.Http;
@@ -30,6 +31,13 @@ public static class DashboardGroup
                 return Results.Ok(response);
             }
 
+        });
+        group.MapPost("/children/{id}/allowance", async ([FromRoute] Guid id, [FromBody] ChildAllowanceAssignmentRequest request, IDocumentSession session, IdentityStreamIdProvider identity ) =>
+        {
+            // TODO: AuthnN on the ID
+            var allowance = new ChildAllowanceAssignment(id, request.WeeklyAllowance);
+            session.Events.Append(identity.GetStreamId(), allowance);
+            return Results.Ok();
         });
         group.MapPostToWolverine<CreateDashboardRequest, Dashboard>("/");
         group.MapPostToWolverine<UserLoginRequest, UserLogin>("/login");
