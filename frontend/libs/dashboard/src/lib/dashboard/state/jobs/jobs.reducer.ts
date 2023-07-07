@@ -1,12 +1,6 @@
 import { EntityState, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
-import { JobDocuments } from '../actions/jobs.actions';
-
-export interface JobsEntity {
-  id: string;
-  name: string;
-  description: string;
-}
+import { JobDocuments, JobsEntity } from '.';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface JobsState extends EntityState<JobsEntity> {}

@@ -1,11 +1,10 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { JobCommands, JobDocuments, JobEvents } from '../actions/jobs.actions';
+import { JobCommands, JobDocuments, JobEvents, JobsEntity } from './index';
 import { map, mergeMap } from 'rxjs';
 import { API_URL } from '@saveup/utils';
 import { HttpClient } from '@angular/common/http';
-import { JobsEntity } from '../reducers/jobs.reducer';
-import { FeatureDocuments } from '../actions/feature.actions';
+import { FeatureDocuments } from '../index';
 
 export const jobAddedToCommand = createEffect(
   (actions$ = inject(Actions)) => {

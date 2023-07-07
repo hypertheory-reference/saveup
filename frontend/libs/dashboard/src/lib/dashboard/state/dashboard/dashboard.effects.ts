@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { FeatureDocuments } from '../actions/feature.actions';
+import { FeatureDocuments } from '../index';
 import { map } from 'rxjs';
-import { DashboardDocuments } from '../actions/dashboard.actions';
+import { DashboardDocuments } from '../dashboard';
 
 export const getDashboardFromDashboard = createEffect(
   (actions$ = inject(Actions)) => {
@@ -10,5 +10,6 @@ export const getDashboardFromDashboard = createEffect(
       ofType(FeatureDocuments.dashboard),
       map(({ payload }) => DashboardDocuments.dashboard({ payload }))
     );
-  }, { functional: true }
+  },
+  { functional: true }
 );

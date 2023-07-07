@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChildrenComponent } from './pages/children/children.component';
 import { Store } from '@ngrx/store';
-import { FeatureEvents } from './state/actions/feature.actions';
+import { FeatureEvents } from './state';
 import { RouterModule } from '@angular/router';
 import { selectDashboardModel } from './state';
 
@@ -10,9 +10,7 @@ import { selectDashboardModel } from './state';
   selector: 'saveup-dashboard',
   standalone: true,
   imports: [CommonModule, ChildrenComponent, RouterModule],
-  template: `
-
-    <router-outlet /> `,
+  template: ` <router-outlet /> `,
   styles: [],
 })
 export class DashboardComponent {

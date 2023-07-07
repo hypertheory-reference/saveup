@@ -5,7 +5,7 @@ import {
   FeatureCommands,
   FeatureDocuments,
   FeatureEvents,
-} from '../actions/feature.actions';
+} from '.';
 import { map, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { API_URL } from '@saveup/utils';

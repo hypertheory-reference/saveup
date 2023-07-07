@@ -1,7 +1,7 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { ChildrenEntity } from '../reducers/children.reducer';
-import { JobsEntity } from '../reducers/jobs.reducer';
-import { ChildJobsEntity } from '../reducers/child-jobs.reducer';
+import { ChildrenEntity } from './children';
+import { JobsEntity } from './jobs';
+import { ChildJobsEntity } from './child-jobs';
 
 export const FeatureEvents = createActionGroup({
   source: 'Dashboard Feature Events',

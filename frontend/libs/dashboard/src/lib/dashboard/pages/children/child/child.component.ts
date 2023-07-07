@@ -5,20 +5,18 @@ import {
   ChildrenAllowanceChange,
   ChildrenEvents,
   ChildrenSetAllowance,
-} from '../../../state/actions/children.actions';
+  ChildrenEntity,
+} from '../../../state/children/';
 import {
   selectChildJobsAssignedToChild,
   selectChildJobsNotAssignedToChild,
   selectChildModel,
 } from '../../../state';
-import { ChildrenEntity } from '../../../state/reducers/children.reducer';
-import { JobsEntity } from '../../../state/reducers/jobs.reducer';
-import {
-  ChildJobCreate,
-  ChildJobEvents,
-} from '../../../state/actions/child-jobs.actions';
+import { JobsEntity } from '../../../state/jobs';
+
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormDataType } from '@saveup/utils';
+import { ChildJobCreate, ChildJobEvents } from '../../../state/child-jobs';
 
 @Component({
   standalone: true,
@@ -34,7 +32,6 @@ export class ChildComponent implements OnInit {
   assignedJobs!: Signal<JobsEntity[] | undefined>;
 
   allowanceForm = new FormGroup<ChildAllowanceFormType>({
-   
     weeklyAllowance: new FormControl<number>(0, { nonNullable: true }),
   });
 
@@ -50,13 +47,12 @@ export class ChildComponent implements OnInit {
   adjustAllowance() {
     const kid = this.child();
     if (kid) {
-      
       const payload: ChildrenSetAllowance = {
         entity: kid,
         changes: {
           weeklyAllowance: this.allowanceForm.controls.weeklyAllowance.value,
-        }
-      }
+        },
+      };
       this.store.dispatch(ChildrenEvents.allowanceSet({ payload }));
     }
   }

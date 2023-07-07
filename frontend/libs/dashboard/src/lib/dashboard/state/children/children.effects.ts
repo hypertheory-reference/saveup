@@ -7,9 +7,9 @@ import {
   ChildrenCommands,
   ChildrenDocuments,
   ChildrenEvents,
-} from '../actions/children.actions';
-import { FeatureDocuments } from '../actions/feature.actions';
-import { ChildrenEntity } from '../reducers/children.reducer';
+  ChildrenEntity,
+} from '.';
+import { FeatureDocuments } from '../';
 
 export const childAddedToCommand = createEffect(
   (actions$ = inject(Actions)) => {

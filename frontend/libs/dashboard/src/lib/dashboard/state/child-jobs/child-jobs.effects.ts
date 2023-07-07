@@ -4,12 +4,12 @@ import {
   ChildJobCommands,
   ChildJobDocuments,
   ChildJobEvents,
-} from '../actions/child-jobs.actions';
+  ChildJobsEntity,
+} from '.';
 import { map, mergeMap } from 'rxjs';
 import { API_URL } from '@saveup/utils';
 import { HttpClient } from '@angular/common/http';
-import { ChildJobsEntity } from '../reducers/child-jobs.reducer';
-import { FeatureDocuments } from '../actions/feature.actions';
+import { FeatureDocuments } from '../';
 
 export const childAssignedToCommands = createEffect(
   (actions$ = inject(Actions)) => {

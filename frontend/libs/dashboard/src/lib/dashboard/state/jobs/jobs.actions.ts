@@ -1,5 +1,5 @@
 import { createActionGroup, props } from '@ngrx/store';
-import { JobsEntity } from '../reducers/jobs.reducer';
+import { JobsEntity } from '.';
 
 export const JobEvents = createActionGroup({
   source: 'Dashboard Jobs Events',

@@ -1,5 +1,5 @@
 import { createActionGroup, props } from '@ngrx/store';
-import { ChildrenEntity } from '../reducers/children.reducer';
+import { ChildrenEntity } from '.';
 
 export const ChildrenEvents = createActionGroup({
   source: 'Dashboard Children Events',
@@ -29,6 +29,6 @@ export type ChildrenCreate = Pick<ChildrenEntity, 'name' | 'birthDate'>;
 
 export type ChildrenAllowanceChange = Pick<ChildrenEntity, 'weeklyAllowance'>;
 export type ChildrenSetAllowance = {
-  entity: ChildrenEntity,
-  changes: ChildrenAllowanceChange
-}
+  entity: ChildrenEntity;
+  changes: ChildrenAllowanceChange;
+};

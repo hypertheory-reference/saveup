@@ -1,13 +1,6 @@
 import { EntityState, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
-import { ChildrenDocuments } from '../actions/children.actions';
-
-export interface ChildrenEntity {
-  id: string;
-  name: string;
-  birthDate: string | null;
-  weeklyAllowance: number | null;
-}
+import { ChildrenEntity, ChildrenDocuments } from '.';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ChildrenState extends EntityState<ChildrenEntity> {}

@@ -19,5 +19,10 @@
     "titleBar.inactiveBackground": "#dd053199",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "peacock.color": "#dd0531"
+  "peacock.color": "#dd0531",
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.reducer.ts": "$(capture).effects.ts, $(capture).reducer.ts, $(capture).selectors.ts, $(capture).actions.ts",
+    "*.component.ts": "$(capture).component.html, $(capture).component.css"
+  }
 }

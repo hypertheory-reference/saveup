@@ -7,11 +7,11 @@ import { authInterceptor } from 'angular-auth-oidc-client';
 import { HomeComponent } from './pages/home/home.component';
 import { DashboardComponent } from './dashboard.component';
 import { FEATURE_NAME, reducers } from './state';
-import * as childJobsEffects from './state/effects/child-jobs.effects';
-import * as childrenMapperCommandsEffects from './state/effects/children.effects';
-import * as dashboardEffects from './state/effects/dashboard.effects';
-import * as featureEffects from './state/effects/feature.effects';
-import * as jobsEffects from './state/effects/jobs.effects';
+import * as childJobsEffects from './state/child-jobs/child-jobs.effects';
+import * as childrenMapperCommandsEffects from './state/children/children.effects';
+import * as dashboardEffects from './state/dashboard/dashboard.effects';
+import * as featureEffects from './state/feature.effects';
+import * as jobsEffects from './state/jobs/jobs.effects';
 import { ChildComponent } from './pages/children/child/child.component';
 export const dashboardRoutes: Route[] = [
   {
@@ -20,17 +20,17 @@ export const dashboardRoutes: Route[] = [
     children: [
       {
         path: 'home',
-        component: HomeComponent
+        component: HomeComponent,
       },
-      
-            {
-              path: 'child/:id',
-              component: ChildComponent,
-            },
+
+      {
+        path: 'child/:id',
+        component: ChildComponent,
+      },
       {
         path: '**',
-        redirectTo: 'home'
-      }
+        redirectTo: 'home',
+      },
       // {
       //   path: 'children',
       //   component: ChildrenComponent,
