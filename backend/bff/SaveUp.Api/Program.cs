@@ -1,15 +1,16 @@
 using Marten;
 using Wolverine;
-using SaveUp.Api;
 using SaveUp.Api.Dashboard;
 using Marten.Events.Projections;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SaveUp.Api.Dashboard.Projections;
 using Microsoft.IdentityModel.Tokens;
 using Weasel.Core;
-using Microsoft.Extensions.Options;
+using Oakton;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.ApplyOaktonExtensions();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -70,6 +71,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors();
 app.MapGroup("dashboard").AddDashboardGroup();
-app.Run();
+return await app.RunOaktonCommands(args);
 
 public partial class Program { }

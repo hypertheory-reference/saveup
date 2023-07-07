@@ -26,7 +26,10 @@ export const reducers: ActionReducerMap<DashboardState> = {
 
 const selectFeature = createFeatureSelector<DashboardState>(FEATURE_NAME);
 
-const selectChildrenBranch = createSelector(selectFeature, (f) => f.children);
+export const _selectChildrenBranch = createSelector(
+  selectFeature,
+  (f) => f.children
+);
 const selectJobsBranch = createSelector(selectFeature, (f) => f.jobs);
 const selectChildJobsBranch = createSelector(selectFeature, (f) => f.childJobs);
 const selectDashboarBranch = createSelector(selectFeature, (f) => f.dashboard);
@@ -38,7 +41,7 @@ const {
   selectAll: selectChildrenEntityArray,
   selectEntities: selectChildEntities,
   selectTotal: selectNumberOfChildren,
-} = fromChildren.adapter.getSelectors(selectChildrenBranch);
+} = fromChildren.adapter.getSelectors(_selectChildrenBranch);
 
 const { selectAll: selectJobsEntityArray, selectEntities: selectJobEntities } =
   fromJobs.adapter.getSelectors(selectJobsBranch);

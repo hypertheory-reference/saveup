@@ -22,7 +22,7 @@
   "peacock.color": "#dd0531",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
-    "*.reducer.ts": "$(capture).effects.ts, $(capture).reducer.ts, $(capture).selectors.ts, $(capture).actions.ts",
+    "*.reducer.ts": "$(capture).effects.ts, $(capture).selectors.ts, $(capture).actions.ts, $(capture).selectors.ts",
     "*.component.ts": "$(capture).component.html, $(capture).component.css"
   }
 }
