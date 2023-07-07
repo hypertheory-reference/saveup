@@ -9,6 +9,7 @@ namespace SaveUp.Api.Dashboard.Projections;
 public record DashboardDetails
 {
     public Guid Id { get; init; }
+    public string FamilyName { get; init; } = string.Empty;
     public int Version { get; init; }
     public UserLogin? User { get; init; }
     public List<Child> Children { get; init; } = new();
@@ -19,10 +20,11 @@ public record DashboardDetails
 }
 public class DashboardDetailsProjection : SingleStreamProjection<DashboardDetails>
 {
-    public  DashboardDetails Create(DashboardCreated created) => new DashboardDetails()
+    public DashboardDetails Create(Dashboard created) => new DashboardDetails()
     {
         Id = created.Id,
-        Version = 0
+        Version = 0,
+        FamilyName = created.FamilyName
     };
 
     public DashboardDetails Apply(Child @event, DashboardDetails current) => current with { Children = current.Children.Append(@event).ToList() };

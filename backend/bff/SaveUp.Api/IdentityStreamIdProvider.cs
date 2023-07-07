@@ -1,4 +1,6 @@
-﻿namespace SaveUp.Api;
+﻿using System.Security.Claims;
+
+namespace SaveUp.Api;
 
 public class IdentityStreamIdProvider
 {
@@ -12,7 +14,9 @@ public class IdentityStreamIdProvider
 
     public Guid GetStreamId()
     {
-        var sid = _contextAccessor?.HttpContext?.User.Claims.First(c => c.Type == "sid").Value ?? throw new Exception("No sid claim found");
+
+        // TODO: A bit brittle - keycloak uses a guid for the sub  claim, but this is not guaranteed
+     var sid = _contextAccessor?.HttpContext?.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value ?? throw new Exception("No sid claim found");
      return Guid.Parse(sid);
 
     }

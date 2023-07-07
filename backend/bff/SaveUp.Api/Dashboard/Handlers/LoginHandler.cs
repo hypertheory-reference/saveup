@@ -17,13 +17,13 @@ public class LoginHandler
         session.Events.Append(id.GetStreamId(), login);
         await session.SaveChangesAsync();
 
-        var savedLogin = await session.LoadAsync<UserLogin>(request.Sub);
-        if(savedLogin is null)
-        {
-            session.Store<UserLogin>(login);
-            await session.SaveChangesAsync();
-            yield return new DashboardCreated(login.Sub);
-        }
+        //var savedLogin = await session.LoadAsync<UserLogin>(request.Sub);
+        //if(savedLogin is null)
+        //{
+        //    session.Store<UserLogin>(login);
+        //    await session.SaveChangesAsync();
+        //    yield return new DashboardCreated(login.Sub);
+        //}
         
         
         yield return login;

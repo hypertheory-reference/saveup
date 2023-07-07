@@ -11,20 +11,32 @@ public static class DashboardGroup
 
     public static RouteGroupBuilder AddDashboardGroup(this RouteGroupBuilder group)
     {
-        group.MapGet("/",  (IDocumentSession session, IdentityStreamIdProvider id, IHttpContextAccessor context) =>
+        group.MapGet("/", async (IDocumentSession session, IdentityStreamIdProvider id, IHttpContextAccessor context) =>
         {
-            
-            return session.Json.WriteById<DashboardDetailsProjection>(id.GetStreamId(), context.HttpContext!);
-            //var response = await session.LoadAsync<DashboardDetailsProjection>(id.GetStreamId());
+
+            var streamId = id.GetStreamId();
+
+            var response = await session.Events.AggregateStreamAsync<DashboardDetails>(streamId);
     
-            //return Results.Ok(response);
+            if(response is null)
+            {
+                var dashboardCreate = new Dashboard(streamId, "Your Family Dashboard");
+                session.Events.Append(streamId, dashboardCreate);
+                await session.SaveChangesAsync();
+                var newDashboard = await session.Events.AggregateStreamAsync<DashboardDetails>(streamId);
+                return Results.Ok(newDashboard);
+            } else
+            {
+                return Results.Ok(response);
+            }
 
         });
+        group.MapPostToWolverine<CreateDashboardRequest, Dashboard>("/");
         group.MapPostToWolverine<UserLoginRequest, UserLogin>("/login");
         group.MapPostToWolverine<ChildCreateRequest, Child>("/children");
         group.MapPostToWolverine<JobCreateRequest, Job>("/jobs");
         group.MapPostToWolverine<ChildJobAssignmentRequest, ChildJobAssignment>("/child-jobs");
-        group.MapPostToWolverine<DashboardCreatedRequest, DashboardCreated>("/create");
+
         group.RequireAuthorization();
         return group;
     }

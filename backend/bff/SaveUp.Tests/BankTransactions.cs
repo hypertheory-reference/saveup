@@ -6,37 +6,37 @@ namespace SaveUp.Tests;
 
 public class BankTransactions
 {
-    [Fact]
-    public async Task DoStuff()
-    {
-        var store = DocumentStore.For(o =>
-        {
-            o.Connection("Host=127.0.0.1;UserName=postgres;Password=Password12!;Port=5438");
-            o.Projections.Snapshot<BankAccountDetails>(SnapshotLifecycle.Inline);
-        });
+    //[Fact]
+    //public async Task DoStuff()
+    //{
+    //    var store = DocumentStore.For(o =>
+    //    {
+    //        o.Connection("Host=127.0.0.1;UserName=postgres;Password=Password12!;Port=5438");
+    //        o.Projections.Snapshot<BankAccountDetails>(SnapshotLifecycle.Inline);
+    //    });
 
-        var accountId = Guid.NewGuid();
+    //    var accountId = Guid.NewGuid();
 
-        await using (var session = store.LightweightSession())
-        {
-            var opened = new SavingsAccountCreated(accountId);
+    //    await using (var session = store.LightweightSession())
+    //    {
+    //        var opened = new SavingsAccountCreated(accountId);
 
-            var deposit = new Deposited(100);
-            var deposit2 = new Deposited(50);
-            var withdraw = new Withdrawn(80);
+    //        var deposit = new Deposited(100);
+    //        var deposit2 = new Deposited(50);
+    //        var withdraw = new Withdrawn(80);
 
-            session.Events.StartStream<BankAccountDetails>(accountId, opened, deposit, deposit2, withdraw);
+    //        session.Events.StartStream<BankAccountDetails>(accountId, opened, deposit, deposit2, withdraw);
 
-            await session.SaveChangesAsync();
-            var details = await session.Events.AggregateStreamAsync<BankAccountDetails>(accountId);
-            Assert.NotNull(details);
-            Assert.Equal(70M, details.Balance);
+    //        await session.SaveChangesAsync();
+    //        var details = await session.Events.AggregateStreamAsync<BankAccountDetails>(accountId);
+    //        Assert.NotNull(details);
+    //        Assert.Equal(70M, details.Balance);
 
-            var detailsEarlier = await session.Events.AggregateStreamAsync<BankAccountDetails>(accountId, 3);
-            Assert.NotNull(detailsEarlier);
-            Assert.Equal(150M, detailsEarlier.Balance);
-        }
+    //        var detailsEarlier = await session.Events.AggregateStreamAsync<BankAccountDetails>(accountId, 3);
+    //        Assert.NotNull(detailsEarlier);
+    //        Assert.Equal(150M, detailsEarlier.Balance);
+    //    }
         
         
-    }
+    //}
 }

@@ -5,20 +5,15 @@ namespace SaveUp.Api.Dashboard.Handlers;
 public class DashboardHandler
 
 {
-    private readonly ILogger<ChildHandler> _logger;
+    
 
-    public DashboardHandler(ILogger<ChildHandler> logger)
-    {
-        _logger = logger;
-    }
-
-    public async Task<DashboardCreated> Handle(DashboardCreatedRequest request, IdentityStreamIdProvider idProvider, IDocumentSession session)
+    public async Task<Dashboard> Handle(CreateDashboardRequest request, IdentityStreamIdProvider idProvider, IDocumentSession session)
     {
 
 
-        var child = new DashboardCreated(idProvider.GetStreamId());
-        session.Events.Append(idProvider.GetStreamId(), child);
+        var dashboard = new Dashboard(idProvider.GetStreamId(), request.FamilyName);
+        session.Events.Append(idProvider.GetStreamId(), dashboard);
         await session.SaveChangesAsync();
-        return child;
+        return dashboard;
     }
 }

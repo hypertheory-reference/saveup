@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SaveUp.Api.Dashboard.Projections;
 using Microsoft.IdentityModel.Tokens;
 using Weasel.Core;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(options =>
@@ -41,8 +42,13 @@ builder.Services.AddMarten(opts =>
 
     opts.Connection(connectionString);
     opts.Projections.Add<DashboardDetailsProjection>(ProjectionLifecycle.Inline);
-   // opts.Projections.Snapshot<DashboardDetailsProjection>(SnapshotLifecycle.Inline);
+    // opts.Projections.Snapshot<DashboardDetailsProjection>(SnapshotLifecycle.Inline);
     opts.DatabaseSchemaName = "saveup";
+
+    if (builder.Environment.IsDevelopment())
+    {
+        opts.AutoCreateSchemaObjects = AutoCreate.All;
+    }
 
 }).UseLightweightSessions();
 
@@ -65,3 +71,5 @@ app.UseAuthorization();
 app.UseCors();
 app.MapGroup("dashboard").AddDashboardGroup();
 app.Run();
+
+public partial class Program { }
