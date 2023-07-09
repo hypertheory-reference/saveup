@@ -1,61 +1,49 @@
-import { Component, Input, OnInit, Signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  Component,
+  Input,
+  OnInit,
+  Signal,
+  inject,
+  signal,
+} from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { FormDataType } from '@saveup/utils';
+import {UiIconDirective} from '@saveup/ui';
+import { selectChildModel } from '../../../state';
+import { ChildJobCreate, ChildJobEvents } from '../../../state/child-jobs';
 import {
   ChildrenAllowanceChange,
-  ChildrenEvents,
-  ChildrenSetAllowance,
   ChildrenEntity,
 } from '../../../state/children/';
-import {
-  selectChildJobsAssignedToChild,
-  selectChildJobsNotAssignedToChild,
-  selectChildModel,
-} from '../../../state';
-import { JobsEntity } from '../../../state/jobs';
-
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { FormDataType } from '@saveup/utils';
-import { ChildJobCreate, ChildJobEvents } from '../../../state/child-jobs';
-
+import { ChildAllowanceAdjustmentComponent } from './child-allowance-adjustment.component';
 @Component({
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ChildAllowanceAdjustmentComponent,
+    UiIconDirective
+
+  ],
   templateUrl: './child.component.html',
   styleUrls: ['./child.component.css'],
 })
 export class ChildComponent implements OnInit {
   @Input({ required: true }) id?: string;
   store = inject(Store);
-  child!: Signal<ChildrenEntity | undefined>;
-  unassignedJobs!: Signal<JobsEntity[] | undefined>;
-  assignedJobs!: Signal<JobsEntity[] | undefined>;
+  child: Signal<ChildrenEntity | undefined> = signal(undefined);
 
-  allowanceForm = new FormGroup<ChildAllowanceFormType>({
-    weeklyAllowance: new FormControl<number>(0, { nonNullable: true }),
-  });
+  constructor(private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.child = this.store.selectSignal(selectChildModel(this.id));
-    this.unassignedJobs = this.store.selectSignal(
-      selectChildJobsNotAssignedToChild(this.id)
-    );
-    this.assignedJobs = this.store.selectSignal(
-      selectChildJobsAssignedToChild(this.id)
+    this.child = this.store.selectSignal(
+      selectChildModel(this.id || undefined)
     );
   }
-  adjustAllowance() {
-    const kid = this.child();
-    if (kid) {
-      const payload: ChildrenSetAllowance = {
-        entity: kid,
-        changes: {
-          weeklyAllowance: this.allowanceForm.controls.weeklyAllowance.value,
-        },
-      };
-      this.store.dispatch(ChildrenEvents.allowanceSet({ payload }));
-    }
-  }
+
   assign(jobId: string) {
     if (this.id) {
       const payload: ChildJobCreate = {

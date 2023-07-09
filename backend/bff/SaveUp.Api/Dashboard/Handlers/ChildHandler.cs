@@ -15,7 +15,7 @@ public class ChildHandler
     {
 
         _logger.LogInformation(idProvider.GetStreamId().ToString());
-        var child = new Child(Guid.NewGuid(), request.Name, request.birthDate);
+        var child = new Child(Guid.NewGuid(), request.Name, request.BirthDate);
         session.Events.Append(idProvider.GetStreamId(), child);
         await session.SaveChangesAsync();
         return child;

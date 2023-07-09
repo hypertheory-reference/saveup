@@ -37,6 +37,7 @@ public static class DashboardGroup
             // TODO: AuthnN on the ID
             var allowance = new ChildAllowanceAssignment(id, request.WeeklyAllowance);
             session.Events.Append(identity.GetStreamId(), allowance);
+            await session.SaveChangesAsync();
             return Results.Ok();
         });
         group.MapPostToWolverine<CreateDashboardRequest, Dashboard>("/");

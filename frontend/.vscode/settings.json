@@ -24,5 +24,7 @@
   "explorer.fileNesting.patterns": {
     "*.reducer.ts": "$(capture).effects.ts, $(capture).selectors.ts, $(capture).actions.ts, $(capture).selectors.ts",
     "*.component.ts": "$(capture).component.html, $(capture).component.css"
-  }
+  },
+  "editor.smartSelect.selectSubwords": true,
+  "files.autoSave": "onFocusChange"
 }

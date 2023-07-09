@@ -1,18 +1,12 @@
-<div *ngIf="child() as child">
-    <h2>{{child.name}}</h2>
-    <p *ngIf="child.weeklyAllowance !== null">Weekly Allowance: {{ child.weeklyAllowance | currency}}</p>
-    <div *ngIf="child.weeklyAllowance === null">
-        <form [formGroup]="allowanceForm" (ngSubmit)="adjustAllowance()">
-            <div class="form-group">
-            <label class="label">Weekly Allowance: 
-                <input type="number" class="input input-bordered w-full max-w-xs" formControlName="weeklyAllowance">
-            </label>
-            
-        </div>
-        </form>
-    </div>
+<div *ngIf="child() as kid">
+    <h2>{{kid.name}}</h2>
+    <p *ngIf="kid.weeklyAllowance !== null">Weekly Allowance: {{ kid.weeklyAllowance | currency}}</p>
+    <i saveupUiIcon>Edit</i>
+    <saveup-child-allowance-adjustment [child]="child" />
 
-<pre>{{ child | json }}</pre>
+<pre>{{ id | json }}</pre>
+
+<pre>{{ kid.weeklyAllowance | json }}</pre>
 </div>
 
 
