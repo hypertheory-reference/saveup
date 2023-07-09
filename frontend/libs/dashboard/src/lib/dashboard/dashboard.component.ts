@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChildrenComponent } from './pages/children/children.component';
 import { Store } from '@ngrx/store';
 import { FeatureEvents } from './state';
 import { RouterModule } from '@angular/router';
@@ -9,7 +8,7 @@ import { selectDashboardModel } from './state';
 @Component({
   selector: 'saveup-dashboard',
   standalone: true,
-  imports: [CommonModule, ChildrenComponent, RouterModule],
+  imports: [CommonModule, RouterModule],
   template: ` <router-outlet /> `,
   styles: [],
 })

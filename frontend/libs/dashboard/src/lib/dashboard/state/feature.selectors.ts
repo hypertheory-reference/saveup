@@ -92,17 +92,18 @@ export const selectDashboardModel = createSelector(
   childrenSelectors.selectAll,
   (db, children) => {
     const kids = children.map((c) => ({
-      id: c.id,
-      name: c.name,
+      ...c,
       weeklyAllowance: c.weeklyAllowance || 0,
     }));
     const weekly = kids.reduce((p, c) => p + c.weeklyAllowance, 0);
     const model: models.DashboardModel = {
       id: db.id,
       familyName: db.familyName,
-      totalWeeklyAllowance: weekly,
-      totalMonthlyAllowance: weekly * 4,
-      totalYearlyAllowance: weekly * 52,
+      allowanceSummary: {
+        totalWeeklyAllowance: weekly,
+        totalMonthlyAllowance: weekly * 4,
+        totalYearlyAllowance: weekly * 52,
+      },
       totalChildren: children.length,
       children: kids,
     };

@@ -8,9 +8,13 @@ export type JobListModel = JobsEntity;
 export type DashboardModel = {
   id: string;
   familyName: string;
+  allowanceSummary: DashboardAllowanceSummary;
+  totalChildren: number;
+  children: ChildListModel[];
+};
+
+export type DashboardAllowanceSummary = {
   totalWeeklyAllowance: number;
   totalMonthlyAllowance: number;
   totalYearlyAllowance: number;
-  totalChildren: number;
-  children: Pick<ChildrenEntity, 'id' | 'name' | 'weeklyAllowance'>[];
 };

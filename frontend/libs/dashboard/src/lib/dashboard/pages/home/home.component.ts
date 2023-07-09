@@ -4,34 +4,24 @@ import { Store } from '@ngrx/store';
 import { selectDashboardModel } from '../../state';
 import { FeatureEvents } from '../../state/';
 import { RouterModule } from '@angular/router';
-import { ListComponent } from '../children/list/list.component';
+import { AllowanceSummaryComponent } from './allowance-summary.component';
+import { ChildListComponent } from './child-lis.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterModule, ListComponent],
-  template: ` <saveup-list />
-    <div *ngIf="model() as model">
-      <h2>{{ model.familyName }}</h2>
-      <p>You have {{ model.totalChildren }} children.</p>
-      <ul>
-        <li *ngFor="let kid of model.children">
-          {{ kid.name }} ({{ kid.weeklyAllowance | currency }}/week)
-          <a [routerLink]="['../child', kid.id]">Details</a>
-        </li>
-      </ul>
-      <ul>
-        <li>
-          Total Weekly Allowance: {{ model.totalWeeklyAllowance | currency }}
-        </li>
-        <li>
-          Total Monthly Allowance: {{ model.totalMonthlyAllowance | currency }}
-        </li>
-        <li>
-          Total Yearly Allowance: {{ model.totalYearlyAllowance | currency }}
-        </li>
-      </ul>
-    </div>`,
+  template: ` <div *ngIf="model() as model">
+    <h2>{{ model.familyName }}</h2>
+    <p>You have {{ model.totalChildren }} children.</p>
+    <saveup-db-allowance-summary [model]="model.allowanceSummary" />
+    <saveup-child-list [model]="model.children" />
+  </div>`,
   styles: [],
+  imports: [
+    CommonModule,
+    RouterModule,
+    AllowanceSummaryComponent,
+    ChildListComponent,
+  ],
 })
 export class HomeComponent {
   model = this.store.selectSignal(selectDashboardModel);

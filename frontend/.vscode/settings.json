@@ -26,5 +26,13 @@
     "*.component.ts": "$(capture).component.html, $(capture).component.css"
   },
   "editor.smartSelect.selectSubwords": true,
-  "files.autoSave": "onFocusChange"
+  "files.autoSave": "onFocusChange",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true
+  }
 }
