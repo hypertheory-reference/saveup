@@ -29,6 +29,15 @@
           "libs/dashboard/**/*.html"
         ]
       }
+    },
+    "component-test": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "libs/dashboard/cypress.config.ts",
+        "testingType": "component",
+        "skipServe": true,
+        "devServerTarget": "frontend:build"
+      }
     }
   }
 }
