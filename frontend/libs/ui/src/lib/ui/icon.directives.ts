@@ -18,7 +18,7 @@ export class UiIconDirective implements OnInit {
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,
-    private renderer: Renderer2
+    private renderer: Renderer2 
   ) {}
 
   ngOnInit() {

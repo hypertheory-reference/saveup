@@ -34,5 +34,8 @@
     "**/CVS": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true
-  }
+  },
+  "exportall.config.folderListener": [
+    "/libs/dashboard/src/lib/dashboard/state/ui-hints"
+  ]
 }

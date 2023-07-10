@@ -13,7 +13,7 @@ const selectChildrenBranch = createSelector(selectFeature, (f) => f.children);
 const selectJobsBranch = createSelector(selectFeature, (f) => f.jobs);
 const selectDashboarBranch = createSelector(selectFeature, (f) => f.dashboard);
 const selectChildJobsBranch = createSelector(selectFeature, (f) => f.childJobs);
-
+const selectUiHintsBranch = createSelector(selectFeature, (f) => f.uiHints );
 const childrenSelectors =
   fromChildren.adapter.getSelectors(selectChildrenBranch);
 
@@ -25,6 +25,10 @@ const dashboardSelectors = createSelector(
   selectDashboarBranch,
   fromDashboard.selectDashboardState
 );
+const selectSelectedChildId = createSelector(
+  selectUiHintsBranch,
+  b => b.selectedChildId
+)
 
 export const selectChildrenListmodel = createSelector(
   childrenSelectors.selectAll,
@@ -36,6 +40,19 @@ export const selectJobsListModel = createSelector(
   (e) => e as models.JobListModel[]
 );
 
+
+export const selectSelectedChildModel =
+  createSelector(childrenSelectors.selectEntities, selectSelectedChildId,  (entities,id) => {
+    if (!id) {
+      return undefined;
+    } else {
+      const kid = entities[id];
+      return {
+        ...kid,
+        weeklyAllowance: kid?.weeklyAllowance ?? null,
+      } as models.ChildListModel;
+    }
+  });
 export const selectChildModel = (id?: string) =>
   createSelector(childrenSelectors.selectEntities, (entities) => {
     if (!id) {

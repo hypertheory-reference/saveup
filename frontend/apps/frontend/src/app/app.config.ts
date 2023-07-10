@@ -13,6 +13,7 @@ import { appRoutes } from './app.routes';
 import { openIdConfiguration } from './openid.config';
 import { reducers } from './state';
 import { AuthEffects } from './state/auth.effects';
+import { provideRouterStore } from '@ngrx/router-store';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -29,5 +30,6 @@ export const appConfig: ApplicationConfig = {
     provideStoreDevtools(),
     provideHttpClient(withInterceptors([authInterceptor()])),
     provideEffects([AuthEffects]),
+    provideRouterStore()
   ],
 };

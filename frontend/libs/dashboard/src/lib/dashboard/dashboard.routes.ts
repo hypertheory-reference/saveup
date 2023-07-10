@@ -12,6 +12,9 @@ import * as childrenMapperCommandsEffects from './state/children/children.effect
 import * as dashboardEffects from './state/dashboard/dashboard.effects';
 import * as featureEffects from './state/feature.effects';
 import * as jobsEffects from './state/jobs/jobs.effects';
+import { ChildDetailsComponent } from './pages/home/components/child-details.component';
+import { AddChildComponent } from './pages/home/components/add-child.component';
+import { RouterEffects } from './state/router.effects';
 
 export const dashboardRoutes: Route[] = [
   {
@@ -21,6 +24,17 @@ export const dashboardRoutes: Route[] = [
       {
         path: 'home',
         component: HomeComponent,
+        children: [
+          {
+            path: 'add-child',
+            component: AddChildComponent,
+            outlet: 'create'
+          },
+        ],
+      },
+      {
+        path: 'child/:id',
+        component: ChildDetailsComponent,
       },
 
       {
@@ -36,7 +50,9 @@ export const dashboardRoutes: Route[] = [
         featureEffects,
         jobsEffects,
         childJobsEffects,
-        dashboardEffects
+        dashboardEffects,
+        RouterEffects
+
       ),
       provideHttpClient(withInterceptors([authInterceptor()])),
     ],

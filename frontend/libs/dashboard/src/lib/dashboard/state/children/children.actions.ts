@@ -1,4 +1,4 @@
-import { createActionGroup, props } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { ChildrenEntity } from '.';
 
 export const ChildrenEvents = createActionGroup({
@@ -6,6 +6,8 @@ export const ChildrenEvents = createActionGroup({
   events: {
     'Child Added': props<{ payload: ChildrenCreate }>(),
     'Allowance Set': props<{ payload: ChildrenSetAllowance }>(),
+    'Requested To Add Child': emptyProps(),
+    'Completed Adding Child': props<{ payload: ChildrenAdddedRequestResult }>(),
   },
 });
 
@@ -14,6 +16,8 @@ export const ChildrenCommands = createActionGroup({
   events: {
     'Add Child': props<{ payload: ChildrenCreate }>(),
     'Set Allowance': props<{ payload: ChildrenSetAllowance }>(),
+    'Set Selected Child Id': props<{ payload: string }>(),
+    'Clear Selected Child Id': emptyProps(),
   },
 });
 
@@ -32,3 +36,5 @@ export type ChildrenSetAllowance = {
   entity: ChildrenEntity;
   changes: ChildrenAllowanceChange;
 };
+
+export type ChildrenAdddedRequestResult = 'completed' | 'cancelled';

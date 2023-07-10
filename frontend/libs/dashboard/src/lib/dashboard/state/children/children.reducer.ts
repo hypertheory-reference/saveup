@@ -3,14 +3,13 @@ import { createReducer, on } from '@ngrx/store';
 import { ChildrenEntity, ChildrenDocuments } from '.';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ChildrenState extends EntityState<ChildrenEntity> {
+export interface ChildrenState extends EntityState<ChildrenEntity> {}
  
-}
 
 export const adapter = createEntityAdapter<ChildrenEntity>();
 
 const initialState = adapter.getInitialState({
- 
+  
 });
 
 export const reducer = createReducer(

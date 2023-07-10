@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { API_URL } from '@saveup/utils';
-import { map, mergeMap } from 'rxjs';
+import { map, mergeMap, tap } from 'rxjs';
 import {
   ChildrenCommands,
   ChildrenDocuments,
@@ -10,6 +10,7 @@ import {
   ChildrenEntity,
 } from '.';
 import { FeatureDocuments } from '../';
+import { Router } from '@angular/router';
 
 export const childAddedToCommand = createEffect(
   (actions$ = inject(Actions)) => {
@@ -19,6 +20,30 @@ export const childAddedToCommand = createEffect(
     );
   },
   { functional: true }
+);
+
+export const childCreateRequestNavigation = createEffect(
+  (actions$ = inject(Actions), router = inject(Router)) => {
+    return actions$.pipe(
+      ofType(ChildrenEvents.requestedToAddChild),
+      tap(() => router.navigate(['/dashboard/home', { outlets: {'create': 'add-child'}}])),
+    )
+  }, { functional: true, dispatch: false }
+);
+
+export const childCreateRequestCompletedNavigation = createEffect(
+  (actions$ = inject(Actions), router = inject(Router)) => {
+    return actions$.pipe(
+      ofType(ChildrenEvents.completedAddingChild),
+      tap(() =>
+        router.navigate([
+          '/dashboard/home',
+          { outlets: { create: 'null' } },
+        ])
+      )
+    );
+  },
+  { functional: true, dispatch: false }
 );
 
 export const childAllowanceToCommand = createEffect(
