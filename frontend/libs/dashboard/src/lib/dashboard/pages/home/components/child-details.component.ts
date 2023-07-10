@@ -50,7 +50,7 @@ import { AgePipe } from '@saveup/utils';
       </div>
     </div>
 
-    <pre> {{ child() | json }} </pre>
+  
   `,
 })
 export class ChildDetailsComponent implements OnInit, OnDestroy {
