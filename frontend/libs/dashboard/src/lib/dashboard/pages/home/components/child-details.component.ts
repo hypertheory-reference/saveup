@@ -4,10 +4,12 @@ import { UiHintsCommands } from '../../../state/ui-hints';
 import { selectSelectedChildModel } from '../../../state';
 import { CommonModule } from '@angular/common';
 import { AgePipe } from '@saveup/utils';
-import { Dialog, DIALOG_DATA, DialogModule } from '@angular/cdk/dialog';
+import { Dialog, DIALOG_DATA, DialogModule, DialogRef } from '@angular/cdk/dialog';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 export type DialogData = {
   message: string;
+
 }
 @Component({
   standalone: true,
@@ -80,7 +82,7 @@ export class ChildDetailsComponent implements OnInit, OnDestroy {
   }
 
   showSetBirthdateDialog() {
-    this.dialog.open(ChildDetailsBirthdateComponent, {
+   const ref =  this.dialog.open<string>(ChildDetailsBirthdateComponent, {
       width: '250px',
       height: '250px',
       hasBackdrop: true,
@@ -88,12 +90,17 @@ export class ChildDetailsComponent implements OnInit, OnDestroy {
         message: 'Add a Birthdate to ' + this.child()?.name || 'Your Child'
       }
     });
+
+    ref.closed.subscribe((result) => {
+      console.log(`They set the birthdate to ${result}`)
+    });
   }
 }
 
 
 @Component({
   standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   template: `<div
     class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
   >
@@ -110,22 +117,21 @@ export class ChildDetailsComponent implements OnInit, OnDestroy {
       </div>
       <!--body-->
       <div class="relative p-6 flex-auto">
-        <p class="my-4 text-slate-500 text-lg leading-relaxed">
-          I always felt like I could do anything. That’s the main
-          thing people are controlled by! Thoughts- their perception
-          of themselves! They're slowed down by their perception of
-          themselves. If you're taught you can’t do anything, you
-          won’t do anything. I was taught I could do everything.
-        </p>
-      </div>
-      <!--footer-->
-      <div class="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-        <button (click)="close()" class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
-          Close
-        </button>
-        <button (click)="close()" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
-          Save Changes
-        </button>
+       <form (ngSubmit)="close(true)" [formGroup]="form">
+        <div class="form-group">
+          <label for="birthdate">Birthdate</label>
+          <input class="input" formControlName="bday" type="date" id="birthdate" name="birthdate"  />
+        </div>
+        <!--footer-->
+        <div class="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+          <button (click)="close(false)" type="reset" class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
+            Close
+          </button>
+          <button (click)="close(true)" type="submit" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
+            Save Changes
+          </button>
+        </div>
+      </form>
       </div>
     </div>
   </div>
@@ -135,9 +141,19 @@ export class ChildDetailsComponent implements OnInit, OnDestroy {
 export class ChildDetailsBirthdateComponent {
   constructor(
     private dialog: Dialog,
+    private dialogRef: DialogRef<string | null>,
     @Inject(DIALOG_DATA) public data: DialogData
   ) {}
-  close() {
-    this.dialog.closeAll();
+
+  form = new FormGroup({
+    
+    bday: new FormControl<string>('', { nonNullable: true, validators: [Validators.required]})
+  });
+  close(didIt: boolean) {
+    if(didIt) {
+      this.dialogRef.close(this.form.controls.bday.value);
+    } else{
+      this.dialogRef.close(null);
+    }
   }
 }
