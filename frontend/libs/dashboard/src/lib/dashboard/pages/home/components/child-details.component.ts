@@ -1,23 +1,36 @@
-import { Component, Inject, Input, OnDestroy, OnInit, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { UiHintsCommands } from '../../../state/ui-hints';
-import { selectSelectedChildModel } from '../../../state';
+import {
+  DIALOG_DATA,
+  Dialog,
+  DialogModule,
+  DialogRef,
+} from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
+import {
+  Component,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject
+} from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { AgePipe } from '@saveup/utils';
-import { Dialog, DIALOG_DATA, DialogModule, DialogRef } from '@angular/cdk/dialog';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-
+import { filter } from 'rxjs';
+import { selectSelectedChildModel } from '../../../state';
+import { UiHintsCommands } from '../../../state/ui-hints';
+import { ChildrenEvents } from '../../../state/children';
 export type DialogData = {
   message: string;
-
-}
+};
 @Component({
   standalone: true,
   imports: [CommonModule, AgePipe, DialogModule],
-  styles: [
-   
-
-  ],
   template: `
     <div
       class="card card-bordered"
@@ -82,77 +95,83 @@ export class ChildDetailsComponent implements OnInit, OnDestroy {
   }
 
   showSetBirthdateDialog() {
-   const ref =  this.dialog.open<string>(ChildDetailsBirthdateComponent, {
-      width: '250px',
-      height: '250px',
+    const ref = this.dialog.open<string>(ChildDetailsBirthdateComponent, {
       hasBackdrop: true,
+      autoFocus: true,
       data: {
-        message: 'Add a Birthdate to ' + this.child()?.name || 'Your Child'
-      }
+        message: 'Add a Birthdate to ' + this.child()?.name || 'Your Child',
+      },
     });
 
-    ref.closed.subscribe((result) => {
-      console.log(`They set the birthdate to ${result}`)
+    ref.closed.pipe(filter((result) => result !== null)).subscribe((result) => {
+      if(this.child() && result) {
+      this.store.dispatch(ChildrenEvents.birthdaySet({
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        entity: this.child()!,
+        changes: {
+          birthDate: result,
+        }
+      }));
+    }
     });
   }
 }
 
-
 @Component({
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  template: `<div
-    class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
-  >
-    
-    <div class="relative w-auto my-6 mx-auto max-w-6xl">
-    <!--content-->
-    <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-      <!--header-->
-      <div class="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-        <h3 class="text-3xl text-black font-semibold">
-          {{data.message}}
-        </h3>
-   
-      </div>
-      <!--body-->
-      <div class="relative p-6 flex-auto">
-       <form (ngSubmit)="close(true)" [formGroup]="form">
-        <div class="form-group">
-          <label for="birthdate">Birthdate</label>
-          <input class="input" formControlName="bday" type="date" id="birthdate" name="birthdate"  />
+  template: `<div class="dialog">
+    <div class="content">
+      <!--content-->
+      <div class="header-block">
+        <!--header-->
+        <div class="header-block-item">
+          <h3 class="text-3xl text-black font-semibold">
+            {{ data.message }}
+          </h3>
         </div>
-        <!--footer-->
-        <div class="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-          <button (click)="close(false)" type="reset" class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
-            Close
-          </button>
-          <button (click)="close(true)" type="submit" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
-            Save Changes
-          </button>
+        <!--body-->
+        <div class="body">
+          <form (submit)="close(true)" [formGroup]="form">
+            <div class="form-group">
+              <label for="birthdate">Birthdate</label>
+              <input
+                class="input"
+                formControlName="bday"
+                type="date"
+                id="birthdate"
+                name="birthdate"
+              />
+            </div>
+            <!--footer-->
+            <div class="buttons">
+              <button (click)="close(false)" type="reset">Close</button>
+              <button type="submit">Save Changes</button>
+            </div>
+          </form>
         </div>
-      </form>
       </div>
     </div>
-  </div>
   </div>`,
-  styles: [``],
+  styleUrls: ['./dialog.css'],
 })
 export class ChildDetailsBirthdateComponent {
   constructor(
-    private dialog: Dialog,
     private dialogRef: DialogRef<string | null>,
     @Inject(DIALOG_DATA) public data: DialogData
   ) {}
 
   form = new FormGroup({
-    
-    bday: new FormControl<string>('', { nonNullable: true, validators: [Validators.required]})
+    bday: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
   });
   close(didIt: boolean) {
-    if(didIt) {
+    if (didIt && this.form.valid) {
       this.dialogRef.close(this.form.controls.bday.value);
-    } else{
+    }
+    if (!didIt) {
       this.dialogRef.close(null);
     }
   }

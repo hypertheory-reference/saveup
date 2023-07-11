@@ -40,6 +40,11 @@ public static class DashboardGroup
             await session.SaveChangesAsync();
             return Results.Ok();
         });
+        group.MapPost("/children/{id}/birthday", () =>
+        {
+            return Results.Ok();
+            
+        })
         group.MapPostToWolverine<CreateDashboardRequest, Dashboard>("/");
         group.MapPostToWolverine<UserLoginRequest, UserLogin>("/login");
         group.MapPostToWolverine<ChildCreateRequest, Child>("/children");
