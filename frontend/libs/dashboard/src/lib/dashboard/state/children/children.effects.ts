@@ -12,6 +12,7 @@ import {
 } from '.';
 import { FeatureDocuments } from '../';
 
+import { API_URL } from '@saveup/utils';
 const x = ChildrenDocuments.child;
 type EventMapping = {
   operator: string;
@@ -97,24 +98,24 @@ function commandToApiMapper(payload: CommandPayloadType) {
   return y;
 }
 
-export const makeCommand = createEffect(
-  (actions$ = inject(Actions)) => {
-    return actions$.pipe(
-      ofType(ChildrenEvents.birthdaySet),
-      tap((a) => console.log({ birthdaySet: a })),
-      map((a) =>
-        ChildrenCommands.setBirthday({
-          id: a.entity.id,
-          payload: a.entity,
-          changes: a.changes,
-          event: 'setBirthday',
-          isCommandSideEffect: true,
-        })
-      )
-    );
-  },
-  { functional: true, dispatch: true }
-);
+// export const makeCommand = createEffect(
+//   (actions$ = inject(Actions)) => {
+//     return actions$.pipe(
+//       ofType(ChildrenEvents.birthdaySet),
+//       tap((a) => console.log({ birthdaySet: a })),
+//       map((a) =>
+//         ChildrenCommands.setBirthday({
+//           id: a.entity.id,
+//           payload: a.entity,
+//           changes: a.changes,
+//           event: 'setBirthday',
+//           isCommandSideEffect: true,
+//         })
+//       )
+//     );
+//   },
+//   { functional: true, dispatch: true }
+// );
 
 export const childAddedToCommand = createEffect(
   (actions$ = inject(Actions)) => {
@@ -145,11 +146,7 @@ export const childAddedToCommand = createEffect(
 export const handleCommandToApi = createEffect(
   (actions$ = inject(Actions), http = inject(HttpClient)) => {
     return actions$.pipe(
-      tap((action) => {
-        const isThere = 'isCommandSideEffect' in action;
-        console.log('isCommandSideEffect', isThere);
-        console.log(action.type);
-      }),
+
       filter((action) => 'isCommandSideEffect' in action),
       map((m) => {
         const response: [CommandPayloadType, unknown] = [
@@ -171,19 +168,25 @@ export const handleCommandToApi = createEffect(
         return response;
       }),
       tap((response: EventMapping) => {
-        console.log(response);
+        console.log({response});
       }),
       mergeMap((response: EventMapping) => {
         return http
-          .request(response.method, 'dashboard' + response.operator, {
+          .request(response.method, API_URL + 'dashboard' + response.operator, {
             body: response.payload,
           })
-          .pipe(map((payload) => response.document({ payload })));
+          .pipe(
+            map((payload) => {
+              const action = response.document({ payload }) as Action;
+              console.log({action});
+              return action;
+            })
+          );
       })
     );
   },
 
-  { functional: true, dispatch: false }
+  { functional: true, dispatch: true }
 );
 
 function makeIntoPayloadType(action: any): CommandPayloadType {
