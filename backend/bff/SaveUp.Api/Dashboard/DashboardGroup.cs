@@ -45,6 +45,11 @@ public static class DashboardGroup
             return Results.Ok();
 
         });
+        group.MapPost("/children/{id}/birthdate", ([FromBody] Object request) =>
+        {
+            return Results.Ok(request);
+
+        });
         group.MapPostToWolverine<CreateDashboardRequest, Dashboard>("/");
         group.MapPostToWolverine<UserLoginRequest, UserLogin>("/login");
         group.MapPostToWolverine<ChildCreateRequest, Child>("/children");

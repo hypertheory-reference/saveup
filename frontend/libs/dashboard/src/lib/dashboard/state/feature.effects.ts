@@ -9,6 +9,7 @@ import {
 import { map, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { API_URL } from '@saveup/utils';
+import { ChildrenDocuments } from './children';
 
 export const enteredShouldLoadData = createEffect(
   (actions$ = inject(Actions)) => {
@@ -33,3 +34,15 @@ export const loadData = createEffect(
   },
   { functional: true }
 );
+
+export const getChildrenFromDashboard = createEffect(
+  (actions$ = inject(Actions)) => {
+    return actions$.pipe(
+      ofType(FeatureDocuments.dashboard),
+      map((c) => c.payload.children),
+      map((payload) => ChildrenDocuments.children({ payload }))
+    );
+  },
+  { functional: true }
+);
+

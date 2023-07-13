@@ -49,19 +49,7 @@ export const selectSelectedChildModel =
       const kid = entities[id];
       return {
         ...kid,
-        weeklyAllowance: kid?.weeklyAllowance ?? null,
-      } as models.ChildListModel;
-    }
-  });
-export const selectChildModel = (id?: string) =>
-  createSelector(childrenSelectors.selectEntities, (entities) => {
-    if (!id) {
-      return undefined;
-    } else {
-      const kid = entities[id];
-      return {
-        ...kid,
-        weeklyAllowance: kid?.weeklyAllowance ?? null,
+        weeklyAllowance: kid?.weeklyAllowance,
       } as models.ChildListModel;
     }
   });

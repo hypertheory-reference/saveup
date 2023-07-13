@@ -40,7 +40,7 @@ export interface FunctionalCreateEffectMetadata extends CreateEffectMetadata {
   [CREATE_EFFECT_METADATA_KEY]: EffectConfig & { functional: true };
 }
 
-
+type EffectResultTypeWithMeta = EffectResult<Action> & CommandMeta;
 
 // export type FunctionalEffect
 // <
@@ -48,8 +48,8 @@ export interface FunctionalCreateEffectMetadata extends CreateEffectMetadata {
 // > = Source & FunctionalCreateEffectMetadata;
 
 export function createEffectBuilder<
-  Source extends () => Observable<Action> 
->(source: Source) {
+  Source extends () => Observable<Action & CommandMeta> 
+>(source: Source): EffectResult<EffectResultTypeWithMeta> {
   
   const meta:CommandMeta = {
     _meta: {
@@ -60,8 +60,8 @@ export function createEffectBuilder<
   //   map((original) => ({...original, ...meta  }) as Action)
   // )
   return source().pipe(
-    map((original) => ({...original, ...meta  }) as Action)
-  ) 
+    map((original) => ({...original, ...meta  }))
+  ) as EffectResult<Action & CommandMeta>;
 }
 
 type CommandMeta = {

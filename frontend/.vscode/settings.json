@@ -22,7 +22,7 @@
   "peacock.color": "#dd0531",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
-    "*.reducer.ts": "$(capture).effects.ts, $(capture).selectors.ts, $(capture).actions.ts, $(capture).selectors.ts",
+    
     "*.component.ts": "$(capture).component.html, $(capture).component.css"
   },
   "editor.smartSelect.selectSubwords": true,
@@ -36,6 +36,7 @@
     "**/Thumbs.db": true
   },
   "exportall.config.folderListener": [
-    "/libs/dashboard/src/lib/dashboard/state/ui-hints"
+    "/libs/dashboard/src/lib/dashboard/state/ui-hints",
+    "/libs/dashboard/src/lib/dashboard/state/children/effects"
   ]
 }

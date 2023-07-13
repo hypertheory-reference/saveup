@@ -5,6 +5,7 @@
     "firsttris.vscode-jest-runner",
     "dbaeumer.vscode-eslint",
     "bradlc.vscode-tailwindcss",
-    "eliostruyf.vscode-typescript-exportallmodules"
+    "eliostruyf.vscode-typescript-exportallmodules",
+    "wenfangdu.snippet-generator"
   ]
 }

@@ -1,7 +1,7 @@
 ﻿namespace SaveUp.Api.Dashboard;
 
-public record ChildCreateRequest(string Name, DateOnly? BirthDate);
-public record Child(Guid Id, string Name, DateOnly? BirthDate);
+public record ChildCreateRequest(string Name);
+public record Child(Guid Id, string Name);
 
 
 public record JobCreateRequest(string Name, string Description);
