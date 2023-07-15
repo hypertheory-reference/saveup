@@ -9,7 +9,7 @@ export const Name = createEffect(
   (actions$ = inject(Actions)) => {
     return actions$.pipe(
       ofType(from),
-      map(({ payload }) => to({ payload }))
+      map(action => to({ entity: action.entity, changes: { birthDate: action.changes.birthDate } }))
     );
   },
   { functional: true }

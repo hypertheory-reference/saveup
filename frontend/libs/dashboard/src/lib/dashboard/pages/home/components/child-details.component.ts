@@ -24,7 +24,7 @@ export type DialogData = {
         <h4 class="card-title">Child Details: {{ child.name }}</h4>
         <div class="child-body">
           <p *ngIf="child.birthDate" data-testid="age-display">
-            {{ child.name }} is {{ child.birthDate | dateToAgePipe }} years old.
+            {{ child.name }} is {{ child.birthDate | dateToAgePipe }} years old <small>{{child.birthDate}}</small>.
           </p>
           <p
             *ngIf="child.weeklyAllowance !== null"
@@ -43,15 +43,9 @@ export type DialogData = {
           >
             Set Birthdate
           </button>
+
           <button
-            
-            data-testid="assign-allowance"
-            class="btn btn-primary"
-          >
-            Assign Allowance
-          </button>
-          <button
-            *ngIf="child.weeklyAllowance !== null"
+     
             data-testid="change-allowance"
             class="btn btn-primary"
           >
@@ -90,13 +84,13 @@ export class ChildDetailsComponent implements OnInit, OnDestroy {
       if (this.child() && result) {
         this.store.dispatch(
           ChildrenEvents.birthdaySet({
-            payload: {
+           
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               entity: this.child()!,
               changes: {
                 birthDate: result,
               },
-            },
+           
           })
         );
       }

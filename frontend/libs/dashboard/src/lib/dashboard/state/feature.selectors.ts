@@ -13,7 +13,7 @@ const selectChildrenBranch = createSelector(selectFeature, (f) => f.children);
 const selectJobsBranch = createSelector(selectFeature, (f) => f.jobs);
 const selectDashboarBranch = createSelector(selectFeature, (f) => f.dashboard);
 const selectChildJobsBranch = createSelector(selectFeature, (f) => f.childJobs);
-const selectUiHintsBranch = createSelector(selectFeature, (f) => f.uiHints );
+const selectUiHintsBranch = createSelector(selectFeature, (f) => f.uiHints);
 const childrenSelectors =
   fromChildren.adapter.getSelectors(selectChildrenBranch);
 
@@ -27,8 +27,8 @@ const dashboardSelectors = createSelector(
 );
 const selectSelectedChildId = createSelector(
   selectUiHintsBranch,
-  b => b.selectedChildId
-)
+  (b) => b.selectedChildId
+);
 
 export const selectChildrenListmodel = createSelector(
   childrenSelectors.selectAll,
@@ -40,9 +40,10 @@ export const selectJobsListModel = createSelector(
   (e) => e as models.JobListModel[]
 );
 
-
-export const selectSelectedChildModel =
-  createSelector(childrenSelectors.selectEntities, selectSelectedChildId,  (entities,id) => {
+export const selectSelectedChildModel = createSelector(
+  childrenSelectors.selectEntities,
+  selectSelectedChildId,
+  (entities, id) => {
     if (!id) {
       return undefined;
     } else {
@@ -52,7 +53,8 @@ export const selectSelectedChildModel =
         weeklyAllowance: kid?.weeklyAllowance,
       } as models.ChildListModel;
     }
-  });
+  }
+);
 
 export const selectChildJobsNotAssignedToChild = (id?: string) =>
   createSelector(
@@ -115,3 +117,6 @@ export const selectDashboardModel = createSelector(
     return model;
   }
 );
+
+export const selectChildEntityById = (id: string) =>
+  createSelector(childrenSelectors.selectEntities, (entities) => entities[id]);
